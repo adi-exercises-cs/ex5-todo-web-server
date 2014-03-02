@@ -1,0 +1,70 @@
+
+---
+tests before login access and login process itself
+
+1 Get to "/"
+    Status code 200 and redirection to /#/login.
+
+2 GET to "/item"
+    Status code 400
+
+3 GET to "/login"
+    Status code 404 ("/login" only supports POST method).
+
+4 POST to "/login" with valid credentials.
+    Status code 200.
+
+5 POST to "/login" with valid username and wrong password.
+    Status code 500 and GET "/item" should fail.
+
+6 POST to "/login" with wrong username.
+    Status code 500 and GET "/item" should fail.
+
+7 GET to "/register" 
+    Status code 404 ("/register" only supports POST method).
+
+8 POST to "/register" with non-existing username and password.
+    Status code 200 and GET "/item" should success.
+
+9 POST to "/register" with existing username.
+    Status code 500.
+
+10 Login and wait for session timeout then GET "/item"
+    Login succeeds
+    GET "/item" fails: Status code 400.
+
+
+---
+tests access after login
+
+11 GET "/item".
+    Status code 200.
+
+12 Add new TODO with non-existing ID then GET "/item"
+    Status code 200 to all requests
+    new item was added to list.
+
+13 Add new TODO with existing ID then GET "/item"
+    Status code 500 to POST request
+    Status code 200 to GET request
+    existing TODO item was not changed.
+
+14 Update non-existing TODO and GET "/item"
+    Status code 500 to PUT request
+    Status code 200 to GET request
+    item was not added to list
+
+15 Update existing TODO and GET "/item"
+    Status code 200 to PUT request
+    Status code 200 to GET request
+    item was updated accordingly.
+
+16 Delete non-existing TODO and GET "/item"
+    Status code 500 to DELETE request
+    Status code 200 to GET request
+    no changes mage.
+
+17 Delete existing TODO and GET "/item"
+    Status code 200 to DELETE request
+    Status code 200 to GET request
+    item was deleted from list.
